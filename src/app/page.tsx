@@ -25,9 +25,9 @@ export default function Home() {
     
     // Calculate qtys
     const calculatedQty = (capital * risk);  
-    const calculateSLPoints = (entryPrice-stopLossPrice);
+    const calculateSLPoints = Math.round(entryPrice-stopLossPrice);
     const calculateQty = Math.round(amountRisked/calculateSLPoints);
-    const calculateMaxCapital = entryPrice * calculateQty;
+    const calculateMaxCapital =  Math.round(entryPrice * calculateQty);
 
     setAmountRisked(calculatedQty);
     setStopLossPoints(calculateSLPoints);
@@ -42,7 +42,7 @@ export default function Home() {
   return (
     <div className="flex flex-col justify-center h-screen items-center">
       <h1 className="font-extrabold py-2 uppercase">Riskometer By Qashif</h1>
-      <div className="border bottom-1 border-sky-500 px-4 py-6">
+      <div className="border bottom-1 border-sky-500 mx-2 px-4 py-6">
         {/* Stock */}
         <div className="flex">
          <p className="w-32">Stock</p> 
