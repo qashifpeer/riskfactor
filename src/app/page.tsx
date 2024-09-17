@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [maxCapital, setMaxCapital] =useState<number>(600000);
-  const [riskPercent, setRiskPercent] =useState<number>(0.025);
+  const [riskPercent, setRiskPercent] =useState<number>(0.25);
   const [amountRisked, setAmountRisked] =useState<number>(0);
   const [entry, setEntry] =useState<number>(0);
   const [stopLoss, setStopLoss] =useState<number>(0);
@@ -16,25 +16,25 @@ export default function Home() {
 
 
   useEffect(() => {
-    const capital= maxCapital;
-    const risk = (riskPercent);
     const entryPrice = (entry) || 0;
     const stopLossPrice = (stopLoss) || 0;
     // const capitalDeploy = (maxCapital) || 0;
     
     
     // Calculate qtys
-    const calculatedQty = (capital * risk);  
+    // const calculatedQty = (capital * risk);
+    const amountRisked =   (maxCapital * riskPercent)/100;
     const calculateSLPoints = Math.round(entryPrice-stopLossPrice);
-    const calculateQty = Math.round(amountRisked/calculateSLPoints);
+    const calculateQty = Math.round(amountRisked/stopLossPoints);
     const calculateMaxCapital =  Math.round(entryPrice * calculateQty);
+    
 
-    setAmountRisked(calculatedQty);
+    setAmountRisked(amountRisked);
     setStopLossPoints(calculateSLPoints);
     setQuantity(calculateQty);
     setCapital(calculateMaxCapital);
     
-      }, [maxCapital, riskPercent,entry,stopLoss]); // Dependency array: recalculate when maxCapital or riskPercent changes
+      }, [maxCapital, riskPercent,entry,stopLoss,stopLossPoints]); // Dependency array: recalculate when maxCapital or riskPercent changes
 
  
 
@@ -71,13 +71,14 @@ export default function Home() {
         <div className="flex mt-1">
           <p className="w-32">Risk Percent</p>
           <div>
+
             <select name="riskPercent" id="riskPercent" className="riskPercent text-black px-2 py-1"  onChange={(e)=>{
               setRiskPercent(Number(e.target.value))
               
             }}>
-              <option value={0.25/100}>0.25%</option>
-              <option value={0.50/100}>0.50%</option>
-              <option value={1/100}>1%</option>
+              <option value={0.25}>0.25%</option>
+              <option value={0.50}>0.50%</option>
+              <option value={1}>1%</option>
              
             </select>
           </div>
@@ -139,7 +140,7 @@ export default function Home() {
           </div>
         </div>
         {/* Target */}
-        
+        {/* <p>{riskPercent}</p> */}
         
       </div>
     </div>
