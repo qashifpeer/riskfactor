@@ -1,13 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 
-// interface Inputs {
-//   capital: number,
-//   riskPercent: number,
-//   entry: number,
-//   stopLoss: number,
-//   amountRisked : number,
-// }
+
 
 export default function Home() {
   const [maxCapital, setMaxCapital] =useState<number>(0);
@@ -144,12 +138,7 @@ export default function Home() {
           </div>
         </div>
         {/* Target */}
-        {/* <div className="flex mt-1">
-         <p className="w-32">Target</p> 
-         {typeofentry}
-          <div>
-          </div>
-        </div> */}
+        
         
       </div>
     </div>
