@@ -13,7 +13,6 @@ export default function Home() {
   const [quantity, setQuantity] = useState<number>(0);
   const [capital,setCapital] = useState<number>(0);
   // let riskedCapital = maxCapital * 
-  const typeofentry = typeof(maxCapital)
 
 
   useEffect(() => {
