@@ -1,101 +1,157 @@
-import Image from "next/image";
+'use client'
+import { useEffect, useState } from "react";
+
+// interface Inputs {
+//   capital: number,
+//   riskPercent: number,
+//   entry: number,
+//   stopLoss: number,
+//   amountRisked : number,
+// }
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [maxCapital, setMaxCapital] =useState<number>(0);
+  const [riskPercent, setRiskPercent] =useState<number>(0.025);
+  const [amountRisked, setAmountRisked] =useState<number>(0);
+  const [entry, setEntry] =useState<number>(0);
+  const [stopLoss, setStopLoss] =useState<number>(0);
+  const [stopLossPoints, setStopLossPoints] =useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(0);
+  const [capital,setCapital] = useState<number>(0);
+  // let riskedCapital = maxCapital * 
+  const typeofentry = typeof(maxCapital)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+
+  useEffect(() => {
+    const capital= maxCapital || 0;
+    const risk = (riskPercent);
+    const entryPrice = (entry) || 0;
+    const stopLossPrice = (stopLoss) || 0;
+    // const capitalDeploy = (maxCapital) || 0;
+    
+    
+    // Calculate qtys
+    const calculatedQty = (capital * risk);  
+    const calculateSLPoints = (entryPrice-stopLossPrice);
+    const calculateQty = Math.round(amountRisked/calculateSLPoints);
+    const calculateMaxCapital = entryPrice * calculateQty;
+
+    setAmountRisked(calculatedQty);
+    setStopLossPoints(calculateSLPoints);
+    setQuantity(calculateQty);
+    setCapital(calculateMaxCapital);
+    
+      }, [maxCapital, riskPercent,entry,stopLoss]); // Dependency array: recalculate when maxCapital or riskPercent changes
+
+ 
+
+
+  return (
+    <div className="flex justify-center h-screen items-center">
+      <div>
+        {/* Stock */}
+        <div className="flex">
+         <p className="w-32">Stock</p> 
+          <div>
+            <input type="text" className="text-black" />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+       
+        {/* Max Capital */}
+        <div className="flex mt-1">
+          <p className="w-32">Max Capital</p>
+          <div>
+            <input type="number" 
+            id="maxCapital"
+            name="maxCapital"
+            onChange={(e)=>{
+              setMaxCapital(Number(e.target.value))
+              
+            }}
+            className="text-black px-2" />
+          </div>
+        </div>
+
+        {/* Risk Percent */}
+        <div className="flex mt-1">
+          <p className="w-32">Risk Percent</p>
+          <div>
+            <select name="riskPercent" id="riskPercent" className="riskPercent text-black px-2 py-1"  onChange={(e)=>{
+              setRiskPercent(Number(e.target.value))
+              
+            }}>
+              <option value={0.25/100}>0.25%</option>
+              <option value={0.50/100}>0.50%</option>
+              <option value={1/100}>1%</option>
+             
+            </select>
+          </div>
+        </div>
+        
+        {/* Amount Risked */}
+        <div className="flex mt-1">
+          <p className="w-32">Amount Risked</p>
+          <div>
+            {/* <input type="number"  className="text-black" onChange={handleAmountRisked}  /> */}
+            <p>{amountRisked}</p>
+          </div>
+        </div>
+        
+        {/* Entry*/}
+        <div className="flex mt-1">
+          <p className="w-32">Entry</p>
+          <div>
+            <input type="number" 
+            className="text-black bg-green-400 font-bold px-2"
+            id="entry" 
+            name="entry"
+            onChange={(e)=>{setEntry(Number(e.target.value))}}/>
+          </div>
+        </div>
+        
+        {/* Stop Loss */}
+        <div className="flex mt-1">
+          <p className="w-32">Stop Loss</p>
+          <div>
+            <input type="number"  className="text-black font-bold bg-red-300 px-2 "
+            id="stopLoss" 
+            name="stopLoss"
+            onChange={(e)=>{setStopLoss(Number(e.target.value))}}  />
+          </div>
+        </div>
+       
+        {/* SL Points */}
+        <div className="flex mt-1">
+         <p className="w-32 ">SL Points</p> 
+          <div>
+            <p>{stopLossPoints}</p>
+          </div>
+        </div>
+       
+        {/* Quantity */}
+        <div className="flex mt-1">
+          <p className="w-32">Quantity</p>
+          <div>
+            <p className="bg-white text-black font-bold px-4 text-center">{quantity}</p>
+          </div>
+        </div>
+        
+        {/* Capital */}
+        <div className="flex mt-1">
+          <p className="w-32">Capital</p>
+          <div className="">
+            <p>{capital}</p>
+          </div>
+        </div>
+        {/* Target */}
+        {/* <div className="flex mt-1">
+         <p className="w-32">Target</p> 
+         {typeofentry}
+          <div>
+          </div>
+        </div> */}
+        
+      </div>
     </div>
   );
 }
