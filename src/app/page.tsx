@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 
 export default function Home() {
-  const [maxCapital, setMaxCapital] =useState<number>(0);
+  const [maxCapital, setMaxCapital] =useState<number>(600000);
   const [riskPercent, setRiskPercent] =useState<number>(0.025);
   const [amountRisked, setAmountRisked] =useState<number>(0);
   const [entry, setEntry] =useState<number>(0);
@@ -16,7 +16,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    const capital= maxCapital || 0;
+    const capital= maxCapital;
     const risk = (riskPercent);
     const entryPrice = (entry) || 0;
     const stopLossPrice = (stopLoss) || 0;
@@ -40,8 +40,9 @@ export default function Home() {
 
 
   return (
-    <div className="flex justify-center h-screen items-center">
-      <div>
+    <div className="flex flex-col justify-center h-screen items-center">
+      <h1 className="font-extrabold py-2 uppercase">Riskometer By Qashif</h1>
+      <div className="border bottom-1 border-sky-500 px-4 py-6">
         {/* Stock */}
         <div className="flex">
          <p className="w-32">Stock</p> 
@@ -61,6 +62,7 @@ export default function Home() {
               setMaxCapital(Number(e.target.value))
               
             }}
+            value={maxCapital}
             className="text-black px-2" />
           </div>
         </div>
@@ -95,7 +97,7 @@ export default function Home() {
           <p className="w-32">Entry</p>
           <div>
             <input type="number" 
-            className="text-black bg-green-400 font-bold px-2"
+            className="text-black bg-sky-400 font-bold px-2"
             id="entry" 
             name="entry"
             onChange={(e)=>{setEntry(Number(e.target.value))}}/>
