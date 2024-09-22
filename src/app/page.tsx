@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { FaRegSave } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { BsInfoCircle } from "react-icons/bs";
+import { MdClear } from "react-icons/md";
 // Define an interface for stock data
 interface StockDataInterface {
   stockId: string;
@@ -16,6 +17,7 @@ interface StockDataInterface {
   stopLossPoints: number;
   quantity: number;
   capital: number;
+  targetPrice: number;
 }
 
 export default function Home() {
@@ -28,6 +30,7 @@ export default function Home() {
   const [stopLossPoints, setStopLossPoints] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
   const [capital, setCapital] = useState<number>(0);
+  const [targetPrice, setTargetPrice] = useState<number>(0);
 
   // State to hold stock list
   const [stockList, setStockList] = useState<StockDataInterface[]>([]);
@@ -62,6 +65,7 @@ export default function Home() {
       stopLossPoints,
       quantity,
       capital,
+      targetPrice,
     };
 
     // Retrieve current list of stocks from localStorage or initialize an empty array
@@ -118,6 +122,7 @@ export default function Home() {
       setStopLossPoints(selectedStock.stopLossPoints);
       setQuantity(selectedStock.quantity);
       setCapital(selectedStock.capital);
+      setTargetPrice(selectedStock.targetPrice);
     }
   };
 
@@ -148,6 +153,7 @@ export default function Home() {
     setStopLossPoints(0);
     setQuantity(0);
     setCapital(0);
+    setTargetPrice(0);
   };
 
   // Fetch the stock list when the component mounts
@@ -166,7 +172,7 @@ export default function Home() {
           <div className="w-1/2">
             <input
               type="text"
-              className="text-black w-32 pl-1"
+              className="text-black bg-slate-200 w-32 pl-1"
               placeholder="Stock Name"
               value={stockName}
               onChange={(e) => {
@@ -188,7 +194,7 @@ export default function Home() {
               onChange={(e) => {
                 setMaxCapital(Number(e.target.value));
               }}
-              className="text-black px-1 w-32"
+              className="text-black bg-slate-200 px-1 w-32"
             />
           </div>
         </div>
@@ -201,7 +207,7 @@ export default function Home() {
               name="riskPercent"
               id="riskPercent"
               
-              className="riskPercent text-black px-1 py-1 w-32"
+              className="riskPercent text-black bg-slate-200 px-1 py-1 w-32"
               onChange={(e) => {
                 setRiskPercent(Number(e.target.value));
               }}
@@ -268,7 +274,7 @@ export default function Home() {
         <div className="flex mt-1">
           <p className="w-1/2">Quantity</p>
           <div className="w-1/2">
-            <p className="bg-white text-red-500 font-bold px-1 text-center w-32">
+            <p className="bg-slate-200 text-red-500 font-bold px-1 text-center w-32">
               {quantity || 0}
             </p>
           </div>
@@ -281,18 +287,35 @@ export default function Home() {
             <p className="w-32">{capital || 0}</p>
           </div>
         </div>
+
+        {/* Target */}
+        <div className="flex">
+          <p className="w-1/2">Target</p>
+          <div className="w-1/2">
+            <input
+              type="number"
+              className="text-black w-32 bg-slate-200 pl-1"
+              placeholder="Stock Name"
+              value={targetPrice}
+              onChange={(e) => {
+                setTargetPrice(Number(e.target.value));
+              }}
+            />
+          </div>
+        </div>
+
         <div className="flex justify-center items-center gap-2 mt-2">
           <button
             onClick={saveStockData}
-            className="border border-sky-500 px-4 py-1 rounded-md hover:bg-sky-200 transition-all delay-75"
+            className="border border-sky-500 px-4 py-1 rounded-md hover:bg-sky-200 transition-all duration-150"
           >
             <FaRegSave className="text-sky-500 text-xl" />
           </button>
           <button
             onClick={clearForm}
-            className="border border-sky-500 px-4 py-1 rounded-md hover:bg-sky-200 transition-all delay-75"
+            className="border border-sky-500 px-4 py-1 rounded-md hover:bg-sky-200 transition-all duration-200"
           >
-            <MdDeleteOutline className="text-sky-500 text-xl" />
+            <MdClear className="text-red-500 text-xl" />
           </button>
         </div>
         <div className="mt-2">
@@ -303,13 +326,13 @@ export default function Home() {
                 <div className="flex w-64 justify-start items-center">
                   <button
                     onClick={() => loadStockData(stock.stockName)}
-                    className="text-start w-3/4 uppercase text text-sm"
+                    className="text-start w-3/4 uppercase text text-sm hover:underline transition-all duration-300"
                   >
                     {stock.stockName}
                   </button>
                   <button
                     onClick={() => deleteStock(stock.stockName)}
-                    className="text-center items-center"
+                    className="text-center items-center hover:translate-x-1 duration-100"
                   >
                     <MdDeleteOutline className="text-red-500 " />
                   </button>
