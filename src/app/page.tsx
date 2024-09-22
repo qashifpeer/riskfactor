@@ -162,9 +162,10 @@ export default function Home() {
   }, [maxCapital, riskPercent, entry, stopLoss, stopLossPoints]);
 
   return (
-    <div className="flex flex-col justify-center h-screen items-center">
+    <div className="flex justify-center items-center">
+      <div className="flex flex-col   items-center  md:p-2 w-[90%] md:w-1/2">
       <h1 className="font-extrabold py-2 uppercase">Riskometer By Qashif <a href="https://x.com/QashifPeer" target="blank"><BsInfoCircle className="inline-block text-sky-500 cursor-pointer" /></a>  </h1>
-      <div className="border bottom-1 border-sky-500 mx-2 px-4 py-6">
+      <div className="border bottom-1 border-sky-500 px-4 py-6 w-full mx-2">
        
         {/* Stock */}
         <div className="flex">
@@ -334,7 +335,7 @@ export default function Home() {
                     onClick={() => deleteStock(stock.stockName)}
                     className="text-center items-center hover:translate-x-1 duration-100"
                   >
-                    <MdDeleteOutline className="text-red-500 " />
+                    <MdDeleteOutline className="text-red-500 text-lg " />
                   </button>
                 </div>
               </li>
@@ -344,6 +345,7 @@ export default function Home() {
 
         {/* Target */}
         {/* <p>{riskPercent}</p> */}
+      </div>
       </div>
     </div>
   );
