@@ -13,7 +13,9 @@ interface StockDataInterface {
   riskPercent: number;
   amountRisked: number;
   entry: number;
-  stopLoss: number;
+  low : number;
+  atr : number;
+  newStopLoss: number;
   stopLossPoints: number;
   quantity: number;
   capital: number;
@@ -23,10 +25,12 @@ interface StockDataInterface {
 export default function Home() {
   const [stockName, setStockName] = useState<string>("");
   const [maxCapital, setMaxCapital] = useState<number>(600000);
-  const [riskPercent, setRiskPercent] = useState<number>(0.25);
+  const [riskPercent, setRiskPercent] = useState<number>(1);
   const [amountRisked, setAmountRisked] = useState<number>(0);
   const [entry, setEntry] = useState<number>(0);
-  const [stopLoss, setStopLoss] = useState<number>(0);
+  const [low, setLow] = useState<number>(0);
+  const [atr, setAtr] = useState<number>(0);
+  const [newStopLoss, setNewStopLoss] = useState<number>(0);
   const [stopLossPoints, setStopLossPoints] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
   const [capital, setCapital] = useState<number>(0);
@@ -37,18 +41,21 @@ export default function Home() {
 
   useEffect(() => {
     const entryPrice = entry || 0;
-    const stopLossPrice = stopLoss || 0;
-    
+    const lowPrice = low || 0;
+    const atrPrice = atr || 0;
+
+    const newStopLoss = lowPrice - atrPrice || 0;
     const amountRisked = (maxCapital * riskPercent) / 100;
-    const calculateSLPoints = Math.round(entryPrice - stopLossPrice);
+    const calculateSLPoints = Math.round(entryPrice - newStopLoss);
     const calculateQty = Math.round(amountRisked / stopLossPoints);
     const calculateMaxCapital = Math.round(entryPrice * calculateQty);
 
     setAmountRisked(amountRisked);
     setStopLossPoints(calculateSLPoints);
+    setNewStopLoss(newStopLoss);
     setQuantity(calculateQty);
     setCapital(calculateMaxCapital);
-  }, [maxCapital, riskPercent, entry, stopLoss, stopLossPoints]); // Dependency array: recalculate when maxCapital or riskPercent changes
+  }, [maxCapital, riskPercent, entry, low, atr, newStopLoss, stopLossPoints]); // Dependency array: recalculate when maxCapital or riskPercent changes
 
   // Function to save or update stock data
   const saveStockData = () => {
@@ -61,7 +68,9 @@ export default function Home() {
       riskPercent,
       amountRisked,
       entry,
-      stopLoss,
+      low,
+      atr,
+      newStopLoss,
       stopLossPoints,
       quantity,
       capital,
@@ -118,7 +127,9 @@ export default function Home() {
       setRiskPercent(selectedStock.riskPercent);
       setAmountRisked(selectedStock.amountRisked);
       setEntry(selectedStock.entry);
-      setStopLoss(selectedStock.stopLoss);
+      setLow(selectedStock.low);
+      setAtr(selectedStock.atr);
+      setNewStopLoss(selectedStock.newStopLoss);
       setStopLossPoints(selectedStock.stopLossPoints);
       setQuantity(selectedStock.quantity);
       setCapital(selectedStock.capital);
@@ -146,10 +157,12 @@ export default function Home() {
   const clearForm = () => {
     setStockName("");
     // setMaxCapital(0);
-    setRiskPercent(0);
+    setRiskPercent(1);
     setAmountRisked(0);
     setEntry(0);
-    setStopLoss(0);
+    setLow(0);
+    setAtr(0);
+    setNewStopLoss(0);
     setStopLossPoints(0);
     setQuantity(0);
     setCapital(0);
@@ -159,7 +172,7 @@ export default function Home() {
   // Fetch the stock list when the component mounts
   useEffect(() => {
     fetchStockList();
-  }, [maxCapital, riskPercent, entry, stopLoss, stopLossPoints]);
+  }, [maxCapital, riskPercent, entry, stopLossPoints]);
 
   return (
     <div className="flex justify-center items-center">
@@ -215,7 +228,7 @@ export default function Home() {
             >
               <option value={0.25}>0.25%</option>
               <option value={0.5}>0.50%</option>
-              <option value={1}>1%</option>
+              <option value={1} selected>1%</option>
               <option value={2}>2%</option>
             </select>
           </div>
@@ -248,16 +261,33 @@ export default function Home() {
 
         {/* Stop Loss */}
         <div className="flex mt-1">
-          <p className="w-1/2">Stop Loss</p>
+          <p className="w-1/2">Low</p>
           <div className="w-1/2">
             <input
               type="number"
               className="text-black font-bold bg-red-300 px-1 w-32"
               id="stopLoss"
               name="stopLoss"
-              value={stopLoss}
+              value={low}
               onChange={(e) => {
-                setStopLoss(Number(e.target.value));
+                setLow(Number(e.target.value));
+              }}
+            />
+          </div>
+        </div>
+
+        {/* ATR */}
+        <div className="flex mt-1">
+          <p className="w-1/2">ATR</p>
+          <div className="w-1/2">
+            <input
+              type="number"
+              className="text-black font-bold bg-red-300 px-1 w-32"
+              id="atr"
+              name="atr"
+              value={atr}
+              onChange={(e) => {
+                setAtr(Number(e.target.value));
               }}
             />
           </div>
@@ -268,6 +298,14 @@ export default function Home() {
           <p className="w-1/2 ">SL Points</p>
           <div className="w-1/2">
             <p className="text-slate-400 text-sm w-32">{stopLossPoints}</p>
+          </div>
+        </div>
+         
+         {/* Stop Loss */}
+         <div className="flex mt-1">
+          <p className="w-1/2 ">Stop Loss</p>
+          <div className="w-1/2">
+            <p className="text-slate-900 font-bold text-base px-1 w-32 bg-sky-400">{newStopLoss}</p>
           </div>
         </div>
 
